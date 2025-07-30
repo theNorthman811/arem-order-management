@@ -1,0 +1,167 @@
+<!-- Hero Section -->
+<div class="hero-section">
+  <div class="container">
+    <div class="row align-items-center min-vh-100">
+      <div class="col-lg-6">
+        <h1 class="display-4 fw-bold text-white mb-4">
+          Bienvenue sur notre boutique en ligne
+        </h1>
+        <p class="lead text-white-50 mb-4">
+          Découvrez notre large gamme de produits de qualité. 
+          Connectez-vous pour passer vos commandes.
+        </p>
+        <div class="d-flex gap-3">
+          <button (click)="onLogin()" class="btn btn-primary btn-lg">
+            <i class="fas fa-sign-in-alt me-2"></i>Se connecter
+          </button>
+          
+          <button (click)="onRegister()" class="btn btn-outline-light btn-lg">
+            <i class="fas fa-user-plus me-2"></i>S'inscrire
+          </button>
+        </div>
+      </div>
+      <div class="col-lg-6 text-center">
+        <div class="hero-image">
+          <i class="fas fa-store fa-10x text-white-50"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Search Section -->
+<div class="search-section py-5 bg-light">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="input-group input-group-lg">
+          <span class="input-group-text bg-white border-end-0">
+            <i class="fas fa-search text-muted"></i>
+          </span>
+          <input 
+            type="text" 
+            class="form-control border-start-0" 
+            placeholder="Rechercher un produit..."
+            [(ngModel)]="searchTerm"
+            (input)="onSearchInput($event)"
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Products Section -->
+<div class="products-section py-5">
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col-12">
+        <h2 class="text-center mb-4">
+          <i class="fas fa-boxes me-2"></i>Nos Produits
+        </h2>
+        <p class="text-center text-muted">
+          Découvrez notre sélection de produits de qualité
+        </p>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Chargement...</span>
+      </div>
+      <p class="mt-3 text-muted">Chargement des produits...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !loading" class="text-center py-5">
+      <div class="alert alert-danger" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        {{ error }}
+      </div>
+      <button class="btn btn-primary" (click)="loadProducts()">
+        <i class="fas fa-redo me-2"></i>Réessayer
+      </button>
+    </div>
+
+    <!-- Products Grid -->
+    <div *ngIf="!loading && !error" class="row g-4">
+      <div 
+        *ngFor="let product of filteredProducts" 
+        class="col-lg-3 col-md-4 col-sm-6"
+      >
+        <div class="card product-card h-100 shadow-sm">
+          <div class="card-body d-flex flex-column">
+            <div class="product-image mb-3">
+              <i class="fas fa-box fa-3x text-primary"></i>
+            </div>
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text text-muted small">
+              {{ product.description || 'Aucune description disponible' }}
+            </p>
+            <div class="mt-auto">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="badge bg-success">{{ product.quantity }} en stock</span>
+                <span class="text-primary fw-bold">{{ product.price | currency:'EUR' }}</span>
+              </div>
+              <div class="d-grid gap-2">
+                <button 
+                  class="btn btn-outline-primary" 
+                  (click)="onProductClick(product)"
+                >
+                  <i class="fas fa-eye me-2"></i>
+                  {{ isAuthenticated() ? 'Voir détails' : 'Se connecter pour commander' }}
+                </button>
+                <button 
+                  class="btn btn-primary" 
+                  (click)="addToCart(product)"
+                  [disabled]="product.quantity <= 0 || !isAuthenticated()"
+                >
+                  <i class="fas fa-cart-plus me-2"></i>
+                  {{ isAuthenticated() ? 'Ajouter au panier' : 'Se connecter' }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Products Found -->
+    <div *ngIf="!loading && !error && filteredProducts.length === 0" class="text-center py-5">
+      <div class="alert alert-info" role="alert">
+        <i class="fas fa-info-circle me-2"></i>
+        Aucun produit trouvé pour votre recherche.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Features Section -->
+<div class="features-section py-5 bg-primary text-white">
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-md-4 mb-4">
+        <div class="feature-item">
+          <i class="fas fa-shipping-fast fa-3x mb-3"></i>
+          <h4>Livraison Rapide</h4>
+          <p>Livraison express dans toute la région</p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="feature-item">
+          <i class="fas fa-shield-alt fa-3x mb-3"></i>
+          <h4>Paiement Sécurisé</h4>
+          <p>Transactions sécurisées et protégées</p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="feature-item">
+          <i class="fas fa-headset fa-3x mb-3"></i>
+          <h4>Support Client</h4>
+          <p>Assistance disponible 24/7</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

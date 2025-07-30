@@ -1,0 +1,153 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="mb-4">
+        <i class="fas fa-shopping-cart me-2"></i>Mon Panier
+      </h2>
+
+      <!-- Loading -->
+      <div *ngIf="loading" class="text-center">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+        <p class="mt-2">Chargement du panier...</p>
+      </div>
+
+      <!-- Error -->
+      <div *ngIf="error" class="alert alert-danger" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i>{{ error }}
+      </div>
+
+      <!-- Empty Cart -->
+      <div *ngIf="!loading && !error && isCartEmpty()" class="text-center py-5">
+        <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+        <h4 class="text-muted">Votre panier est vide</h4>
+        <p class="text-muted">Ajoutez des produits pour commencer vos achats</p>
+        <button class="btn btn-primary" (click)="continueShopping()">
+          <i class="fas fa-shopping-bag me-2"></i>Continuer les achats
+        </button>
+      </div>
+
+      <!-- Cart Items -->
+      <div *ngIf="!loading && !error && !isCartEmpty()" class="row">
+        <div class="col-lg-8">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-list me-2"></i>Produits ({{ getItemCount() }})
+              </h5>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Produit</th>
+                      <th class="text-center">Prix</th>
+                      <th class="text-center">Quantité</th>
+                      <th class="text-center">Total</th>
+                      <th class="text-center">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of cart?.items">
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="me-3">
+                            <i class="fas fa-box fa-2x text-primary"></i>
+                          </div>
+                          <div>
+                            <h6 class="mb-1">{{ item.product?.name }}</h6>
+                            <small class="text-muted">{{ item.product?.reference }}</small>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <strong>{{ item.product?.price | currency:'EUR':'symbol':'1.2-2' }}</strong>
+                      </td>
+                      <td class="text-center">
+                        <div class="input-group input-group-sm" style="width: 120px; margin: 0 auto;">
+                          <button class="btn btn-outline-secondary" 
+                                  type="button" 
+                                  (click)="updateQuantity(item, item.quantity - 1)"
+                                  [disabled]="item.quantity <= 1">
+                            <i class="fas fa-minus"></i>
+                          </button>
+                          <input type="number" 
+                                 class="form-control text-center" 
+                                 [value]="item.quantity"
+                                 (change)="onQuantityChange($event, item)"
+                                 min="1"
+                                 max="99">
+                          <button class="btn btn-outline-secondary" 
+                                  type="button" 
+                                  (click)="updateQuantity(item, item.quantity + 1)">
+                            <i class="fas fa-plus"></i>
+                          </button>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <strong>{{ item.subtotal | currency:'EUR':'symbol':'1.2-2' }}</strong>
+                      </td>
+                      <td class="text-center">
+                        <button class="btn btn-outline-danger btn-sm" 
+                                (click)="removeItem(item)"
+                                title="Supprimer">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cart Summary -->
+        <div class="col-lg-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-receipt me-2"></i>Récapitulatif
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="d-flex justify-content-between mb-2">
+                <span>Nombre d'articles:</span>
+                <strong>{{ getItemCount() }}</strong>
+              </div>
+              <div class="d-flex justify-content-between mb-3">
+                <span>Total:</span>
+                <strong class="text-primary fs-5">{{ getTotal() | currency:'EUR':'symbol':'1.2-2' }}</strong>
+              </div>
+              
+              <hr>
+              
+              <div class="d-grid gap-2">
+                <button class="btn btn-primary" 
+                        (click)="proceedToCheckout()"
+                        [disabled]="isCartEmpty() || isProcessingCheckout">
+                  <span *ngIf="isProcessingCheckout" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                  <i *ngIf="!isProcessingCheckout" class="fas fa-credit-card me-2"></i>
+                  {{ isProcessingCheckout ? 'Création de la commande...' : 'Passer la commande' }}
+                </button>
+                
+                <button class="btn btn-outline-secondary" 
+                        (click)="continueShopping()">
+                  <i class="fas fa-arrow-left me-2"></i>Continuer les achats
+                </button>
+                
+                <button class="btn btn-outline-danger" 
+                        (click)="clearCart()"
+                        [disabled]="isCartEmpty()">
+                  <i class="fas fa-trash me-2"></i>Vider le panier
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

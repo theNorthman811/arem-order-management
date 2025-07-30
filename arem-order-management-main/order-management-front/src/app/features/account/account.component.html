@@ -1,0 +1,72 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <div class="card">
+        <div class="card-header">
+          <h2>Mon compte</h2>
+        </div>
+        <div class="card-body">
+          <div *ngIf="loading" class="text-center">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Chargement...</span>
+            </div>
+            <p class="mt-2">Chargement des informations...</p>
+          </div>
+
+          <div *ngIf="error" class="alert alert-danger">
+            {{ error }}
+          </div>
+
+          <div *ngIf="!loading && !error && userInfo" class="user-info">
+            <div class="row">
+              <div class="col-md-6">
+                <h4>Informations personnelles</h4>
+                <table class="table table-borderless">
+                  <tr>
+                    <td><strong>Prénom :</strong></td>
+                    <td>{{ userInfo.firstName }}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Nom :</strong></td>
+                    <td>{{ userInfo.lastName }}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Email :</strong></td>
+                    <td>{{ userInfo.email }}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Téléphone :</strong></td>
+                    <td>{{ userInfo.phoneNumber }}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Adresse :</strong></td>
+                    <td>{{ userInfo.address }}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Rôle :</strong></td>
+                    <td>
+                      <span *ngIf="userInfo.role === 'CUSTOMER'" class="badge bg-primary">Client</span>
+                      <span *ngIf="userInfo.role === 'ADMIN'" class="badge bg-danger">Administrateur</span>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div class="col-md-6">
+                <h4>Actions</h4>
+                <div class="d-grid gap-2">
+                  <button class="btn btn-outline-primary" (click)="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Se déconnecter
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="!loading && !error && !userInfo" class="text-center">
+            <p>Aucune information utilisateur disponible.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

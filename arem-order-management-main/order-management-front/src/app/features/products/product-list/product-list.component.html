@@ -1,0 +1,122 @@
+<div class="products-container">
+  <div class="header">
+    <h1>Gestion des Produits</h1>
+    <button mat-raised-button color="primary" (click)="createProduct()">
+      <mat-icon>add</mat-icon>
+      Nouveau Produit
+    </button>
+  </div>
+
+  <div class="filters-section">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Rechercher un produit</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Nom, référence, marque..." #input>
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Trier par</mat-label>
+      <mat-select [(ngModel)]="sortBy" (selectionChange)="applySort()">
+        <mat-option value="name-asc">Nom (A-Z)</mat-option>
+        <mat-option value="name-desc">Nom (Z-A)</mat-option>
+        <mat-option value="reference-asc">Référence (A-Z)</mat-option>
+        <mat-option value="reference-desc">Référence (Z-A)</mat-option>
+        <mat-option value="price-asc">Prix (croissant)</mat-option>
+        <mat-option value="price-desc">Prix (décroissant)</mat-option>
+        <mat-option value="quantity-asc">Stock (croissant)</mat-option>
+        <mat-option value="quantity-desc">Stock (décroissant)</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-button color="primary" (click)="clearFilters()" class="clear-filters-btn">
+      <mat-icon>clear</mat-icon>
+      Effacer les filtres
+    </button>
+  </div>
+
+  <div class="loading-spinner" *ngIf="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <div class="error-message" *ngIf="error">
+    <mat-icon color="warn">error</mat-icon>
+    <p>{{ error }}</p>
+  </div>
+
+  <div class="products-grid" *ngIf="filteredProducts && filteredProducts.length > 0">
+    <mat-card class="product-card" *ngFor="let product of filteredProducts">
+      <mat-card-header>
+        <mat-card-title>
+          {{ product.name }}
+          <span class="stock-badge" [ngClass]="getStockStatus(product.quantity).color">
+            {{ getStockStatus(product.quantity).status }}
+          </span>
+        </mat-card-title>
+        <mat-card-subtitle>
+          <mat-icon>inventory</mat-icon>
+          Réf: {{ product.reference }}
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="product-details">
+          <p *ngIf="product.marque">
+            <mat-icon>branding_watermark</mat-icon>
+            Marque: {{ product.marque }}
+          </p>
+          <p>
+            <mat-icon>euro</mat-icon>
+            Prix: {{ product.price | currency:'EUR' }}
+          </p>
+          <p>
+            <mat-icon>inventory_2</mat-icon>
+            Stock: {{ product.quantity }} {{ product.measure }}
+          </p>
+          <p *ngIf="product.description">
+            <mat-icon>description</mat-icon>
+            {{ product.description }}
+          </p>
+        </div>
+
+        <div class="product-meta">
+          <p class="meta-info">
+            <small>
+              <mat-icon>schedule</mat-icon>
+              Créé: {{ product.creationDate | date:'dd/MM/yyyy' }}
+            </small>
+          </p>
+          <p class="meta-info" *ngIf="product.modifDate">
+            <small>
+              <mat-icon>update</mat-icon>
+              Modifié: {{ product.modifDate | date:'dd/MM/yyyy' }}
+            </small>
+          </p>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button mat-button color="primary" (click)="editProduct(product)">
+          <mat-icon>edit</mat-icon>
+          Modifier
+        </button>
+        <button mat-button color="warn" (click)="deleteProduct(product.id)">
+          <mat-icon>delete</mat-icon>
+          Supprimer
+        </button>
+        <button mat-button color="accent" (click)="addToCart(product)">
+          <mat-icon>shopping_cart</mat-icon>
+          Ajouter au panier
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <div class="no-products" *ngIf="!loading && (!filteredProducts || filteredProducts.length === 0)">
+    <mat-icon>inventory</mat-icon>
+    <p>Aucun produit trouvé</p>
+    <button mat-raised-button color="primary" (click)="createProduct()">
+      <mat-icon>add</mat-icon>
+      Créer le premier produit
+    </button>
+  </div>
+</div>

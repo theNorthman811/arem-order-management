@@ -1,0 +1,197 @@
+<!-- Notifications Panel -->
+<app-notification-panel></app-notification-panel>
+
+<div class="admin-products">
+  <!-- Header avec titre et actions -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">
+        <i class="fas fa-boxes"></i>
+        Gestion des Produits
+      </h1>
+      <p class="page-subtitle">Gérez votre inventaire, prix et stocks</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-success btn-add" (click)="addProduct()">
+        <i class="fas fa-plus"></i>
+        Nouveau Produit
+      </button>
+    </div>
+  </div>
+
+  <!-- Statistiques rapides -->
+  <div class="stats-overview">
+    <div class="stat-card total">
+      <div class="stat-icon">
+        <i class="fas fa-cube"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ totalProducts }}</div>
+        <div class="stat-label">Produits Total</div>
+      </div>
+    </div>
+    
+    <div class="stat-card stock-ok">
+      <div class="stat-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ stockOkCount }}</div>
+        <div class="stat-label">Stock OK</div>
+      </div>
+    </div>
+    
+    <div class="stat-card low-stock">
+      <div class="stat-icon">
+        <i class="fas fa-exclamation-triangle"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ lowStockCount }}</div>
+        <div class="stat-label">Stock Faible</div>
+      </div>
+    </div>
+    
+    <div class="stat-card out-stock">
+      <div class="stat-icon">
+        <i class="fas fa-times-circle"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ outOfStockCount }}</div>
+        <div class="stat-label">Stock Épuisé</div>
+      </div>
+    </div>
+    
+    <div class="stat-card value">
+      <div class="stat-icon">
+        <i class="fas fa-euro-sign"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ totalValue | currency:'EUR':'symbol':'1.0-0' }}</div>
+        <div class="stat-label">Valeur Stock</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filtres et recherche -->
+  <div class="filters-section">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" 
+             placeholder="Rechercher un produit..." 
+             [(ngModel)]="searchTerm"
+             (input)="applyFilters()">
+    </div>
+    <div class="filter-buttons">
+      <button class="filter-btn" 
+              [class.active]="stockFilter === 'all'"
+              (click)="setStockFilter('all')">
+        Tous
+      </button>
+      <button class="filter-btn" 
+              [class.active]="stockFilter === 'ok'"
+              (click)="setStockFilter('ok')">
+        Stock OK
+      </button>
+      <button class="filter-btn" 
+              [class.active]="stockFilter === 'low'"
+              (click)="setStockFilter('low')">
+        Stock Faible
+      </button>
+      <button class="filter-btn" 
+              [class.active]="stockFilter === 'out'"
+              (click)="setStockFilter('out')">
+        Rupture
+      </button>
+    </div>
+  </div>
+
+  <!-- Liste des produits en mode cartes -->
+  <div class="products-grid" *ngIf="!loading && filteredProducts.length > 0">
+    <div class="product-card" *ngFor="let product of filteredProducts">
+      <!-- Badge de statut stock -->
+      <div class="stock-badge" [ngClass]="getStockBadgeClass(product)">
+        {{ getStockStatusText(product) }}
+      </div>
+      
+      <!-- Contenu de la carte -->
+      <div class="product-header">
+        <h3 class="product-name">{{ product.name }}</h3>
+        <span class="product-brand">{{ product.marque }}</span>
+      </div>
+      
+      <div class="product-info">
+        <div class="product-ref">
+          <i class="fas fa-barcode"></i>
+          {{ product.reference }}
+        </div>
+        <div class="product-description">
+          {{ product.description }}
+        </div>
+      </div>
+      
+      <div class="product-stats">
+        <div class="stat-item">
+          <div class="stat-icon stock" [ngClass]="getStockClass(product)">
+            <i class="fas fa-boxes"></i>
+          </div>
+          <div class="stat-text">
+            <div class="stat-value">{{ product.quantity }}</div>
+            <div class="stat-label">{{ getMeasureText(product.measure) }}</div>
+          </div>
+        </div>
+        
+        <div class="stat-item">
+          <div class="stat-icon price">
+            <i class="fas fa-euro-sign"></i>
+          </div>
+          <div class="stat-text">
+            <div class="stat-value">{{ product.price | currency:'EUR':'symbol':'1.2-2' }}</div>
+            <div class="stat-label">Prix vente</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="product-actions">
+        <button class="btn-action edit" (click)="editProduct(product)">
+          <i class="fas fa-edit"></i>
+          Modifier
+        </button>
+        <button class="btn-action stock" (click)="manageStock(product)">
+          <i class="fas fa-warehouse"></i>
+          Stock
+        </button>
+        <button class="btn-action delete" (click)="deleteProduct(product)">
+          <i class="fas fa-trash"></i>
+          Supprimer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Message si aucun produit -->
+  <div class="no-products" *ngIf="!loading && filteredProducts.length === 0">
+    <div class="no-products-icon">
+      <i class="fas fa-box-open"></i>
+    </div>
+    <h3>Aucun produit trouvé</h3>
+    <p>Commencez par ajouter votre premier produit au catalogue.</p>
+    <button class="btn btn-primary" (click)="addProduct()">
+      <i class="fas fa-plus"></i>
+      Ajouter un produit
+    </button>
+  </div>
+
+  <!-- Loader -->
+  <div class="loader" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Chargement des produits...</p>
+  </div>
+
+  <!-- Dialogue d'ajout/modification -->
+  <app-admin-product-dialog *ngIf="showDialog"
+                            [isEdit]="isEditMode"
+                            [product]="dialogProduct"
+                            (close)="onDialogClose()"
+                            (save)="onProductSaved($event)">
+  </app-admin-product-dialog>
+</div> 

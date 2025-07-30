@@ -1,0 +1,173 @@
+<div *ngIf="loading" class="loading-container">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div *ngIf="error" class="error-container">
+  <mat-card>
+    <mat-card-content>
+      <p class="error-message">{{ error }}</p>
+      <button mat-raised-button color="primary" (click)="goBack()">
+        Retour à la liste
+      </button>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div *ngIf="!loading && !error && order" class="order-detail-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        Commande #{{order.id}}
+        <span class="status-badge" [ngClass]="order.status.toLowerCase()">
+          {{order.status}}
+        </span>
+      </mat-card-title>
+      <mat-card-subtitle>
+        Client ID: {{order.customerId}}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="order-details">
+        <div class="order-info">
+          <p><strong>Date de commande:</strong> {{order.orderDate | date:'medium'}}</p>
+          <p><strong>Dernière modification:</strong> {{order.lastModifiedDate | date:'medium'}}</p>
+        </div>
+
+        <div class="items-section">
+          <div class="section-header">
+            <h3>Articles</h3>
+            <button mat-raised-button color="primary" (click)="openAddItemDialog()">
+              <mat-icon>add</mat-icon>
+              Ajouter un article
+            </button>
+          </div>
+
+          <mat-table [dataSource]="order.items" class="items-table">
+            <!-- Product Column -->
+            <ng-container matColumnDef="product">
+              <mat-header-cell *matHeaderCellDef>Produit</mat-header-cell>
+              <mat-cell *matCellDef="let item">
+                {{item.product?.name || 'Produit inconnu'}} 
+                <span *ngIf="item.product?.reference">({{item.product.reference}})</span>
+                <span *ngIf="item.product?.marque"> - {{item.product.marque}}</span>
+              </mat-cell>
+            </ng-container>
+
+            <!-- Quantity Column -->
+            <ng-container matColumnDef="quantity">
+              <mat-header-cell *matHeaderCellDef>Quantité</mat-header-cell>
+              <mat-cell *matCellDef="let item">
+                {{item.quantity}} {{item.measure}}
+              </mat-cell>
+            </ng-container>
+
+            <!-- Price Column -->
+            <ng-container matColumnDef="price">
+              <mat-header-cell *matHeaderCellDef>Prix unitaire</mat-header-cell>
+              <mat-cell *matCellDef="let item">
+                {{item.unitPrice | currency:'EUR'}}
+              </mat-cell>
+            </ng-container>
+
+            <!-- Total Column -->
+            <ng-container matColumnDef="total">
+              <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
+              <mat-cell *matCellDef="let item">
+                {{item.quantity * item.unitPrice | currency:'EUR'}}
+              </mat-cell>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+              <mat-cell *matCellDef="let item">
+                <button mat-icon-button color="primary" (click)="openEditItemDialog(item)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="removeItem(item.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="['product', 'quantity', 'price', 'total', 'actions']"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: ['product', 'quantity', 'price', 'total', 'actions']"></mat-row>
+          </mat-table>
+
+          <div class="total-section">
+            <h4>Total de la commande: {{order.totalAmount | currency:'EUR'}}</h4>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-button (click)="goBack()">Retour</button>
+      <button mat-raised-button color="warn" (click)="deleteOrder()">
+        Supprimer la commande
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+
+<style>
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.error-container {
+  max-width: 600px;
+  margin: 2rem auto;
+}
+
+.error-message {
+  color: #f44336;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.order-detail-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.total-amount {
+  margin-left: 2rem;
+  font-weight: bold;
+}
+
+.items-container {
+  margin-top: 2rem;
+}
+
+.items-table {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+mat-card-actions {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem !important;
+}
+
+mat-card-actions button {
+  display: flex;
+  align-items: center;
+}
+
+mat-card-actions button mat-icon {
+  margin-right: 0.5rem;
+}
+</style> 

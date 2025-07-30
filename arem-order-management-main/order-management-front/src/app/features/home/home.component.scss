@@ -1,0 +1,201 @@
+// Hero Section
+.hero-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: visible; // Changé de hidden à visible
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+    pointer-events: none; // Empêche les clics sur le background
+  }
+
+  .hero-image {
+    animation: float 6s ease-in-out infinite;
+    pointer-events: none; // Empêche les clics sur l'image
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+// Search Section
+.search-section {
+  .input-group {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 50px;
+    overflow: hidden;
+
+    .form-control {
+      border: none;
+      padding: 15px 20px;
+      font-size: 1.1rem;
+
+      &:focus {
+        box-shadow: none;
+      }
+    }
+
+    .input-group-text {
+      border: none;
+      padding: 15px 20px;
+    }
+  }
+}
+
+// Products Section
+.products-section {
+  .product-card {
+    transition: all 0.3s ease;
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    .product-image {
+      text-align: center;
+      padding: 1rem;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border-radius: 10px;
+    }
+
+    .card-title {
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-text {
+      line-height: 1.4;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      padding: 0.5rem 0.75rem;
+    }
+
+    .btn {
+      border-radius: 25px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+      }
+    }
+  }
+}
+
+// Features Section
+.features-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  .feature-item {
+    padding: 2rem 1rem;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: translateY(-10px);
+    }
+
+    h4 {
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      opacity: 0.9;
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .hero-section {
+    text-align: center;
+    
+    .display-4 {
+      font-size: 2rem;
+    }
+    
+    .hero-image {
+      margin-top: 2rem;
+    }
+  }
+
+  .search-section {
+    .input-group {
+      border-radius: 25px;
+    }
+  }
+
+  .products-section {
+    .product-card {
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+// Loading Animation
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+// Alert Styling
+.alert {
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+// Button Styling
+.btn {
+  border-radius: 25px;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &.btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+  }
+}
+
+// Text Utilities
+.text-white-50 {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+// Card Hover Effects
+.card {
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+  }
+} 

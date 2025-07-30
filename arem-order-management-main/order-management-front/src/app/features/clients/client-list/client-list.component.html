@@ -1,0 +1,79 @@
+<div class="client-management">
+  <div class="header">
+    <h2>Gestion des Clients</h2>
+    <button class="btn btn-primary" (click)="openCreateDialog()">
+      <i class="fas fa-plus"></i> Nouveau Client
+    </button>
+  </div>
+
+  <!-- Filtres et recherche -->
+  <div class="filters-section">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="search-box">
+          <input 
+            type="text" 
+            class="form-control" 
+            placeholder="Rechercher un client..."
+            [(ngModel)]="searchTerm"
+            (input)="onSearchChange()">
+        </div>
+      </div>
+      <div class="col-md-3">
+        <select class="form-select" [(ngModel)]="sortBy" (change)="onSortChange()">
+          <option value="name">Trier par nom</option>
+          <option value="email">Trier par email</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <button class="btn btn-outline-secondary" (click)="sortOrder = sortOrder === 'asc' ? 'desc' : 'asc'; onSortChange()">
+          <i class="fas" [class.fa-sort-up]="sortOrder === 'asc'" [class.fa-sort-down]="sortOrder === 'desc'"></i>
+          {{ sortOrder === 'asc' ? 'Croissant' : 'Décroissant' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Liste des clients -->
+  <div class="customers-list">
+    <div *ngIf="loading" class="loading">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Chargement...</span>
+      </div>
+      <p>Chargement des clients...</p>
+    </div>
+
+    <div *ngIf="!loading && filteredCustomers.length === 0" class="no-data">
+      <i class="fas fa-users fa-3x text-muted"></i>
+      <p>Aucun client trouvé</p>
+    </div>
+
+    <div *ngIf="!loading && filteredCustomers.length > 0" class="row">
+      <div *ngFor="let customer of filteredCustomers" class="col-md-6 col-lg-4 mb-3">
+        <div class="customer-card">
+          <div class="customer-header">
+            <h5>{{ customer.firstName }} {{ customer.lastName }}</h5>
+            <div class="actions">
+              <button class="btn btn-sm btn-outline-primary" (click)="editCustomer(customer)">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteCustomer(customer)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+          <div class="customer-info">
+            <p><i class="fas fa-envelope"></i> {{ customer.email }}</p>
+            <p *ngIf="customer.phoneNumber"><i class="fas fa-phone"></i> {{ customer.phoneNumber }}</p>
+            <p *ngIf="customer.address"><i class="fas fa-map-marker-alt"></i> {{ customer.address }}</p>
+          </div>
+          <div class="customer-footer">
+            <small class="text-muted">
+              Créé le {{ customer.creationDate | date:'dd/MM/yyyy' }}
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

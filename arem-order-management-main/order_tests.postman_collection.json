@@ -1,0 +1,246 @@
+{
+	"info": {
+		"_postman_id": "random-uuid",
+		"name": "Order Management Tests",
+		"description": "Collection pour tester la gestion complète des commandes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Create New Order",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYXRpYUBnbWFpbC5jb20iLCJpYXQiOjE3NTA5OTA3MjMsImV4cCI6MTc1MTAwODcyM30.LrVGLFqjFxT3_XGmWQTjUQ06fcC08QS0zO6J4g2ITwgSe-GeUDRw2xxhLveWT0Goeii16hOmCm2VQVDsNpYlWw"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/orders/create?customerId=1",
+					"host": ["localhost"],
+					"port": "8080",
+					"path": ["api", "orders", "create"],
+					"query": [
+						{
+							"key": "customerId",
+							"value": "1",
+							"description": "ID du client pour qui créer la commande"
+						}
+					]
+				},
+				"description": "Crée une nouvelle commande pour un client spécifique. La commande est initialement en statut PENDING."
+			}
+		},
+		{
+			"name": "2. Add First Item to Order",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYXRpYUBnbWFpbC5jb20iLCJpYXQiOjE3NTA5OTA3MjMsImV4cCI6MTc1MTAwODcyM30.LrVGLFqjFxT3_XGmWQTjUQ06fcC08QS0zO6J4g2ITwgSe-GeUDRw2xxhLveWT0Goeii16hOmCm2VQVDsNpYlWw"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/orders/1/items?productId=1&quantity=2",
+					"host": ["localhost"],
+					"port": "8080",
+					"path": ["api", "orders", "1", "items"],
+					"query": [
+						{
+							"key": "productId",
+							"value": "1",
+							"description": "ID du premier produit à ajouter"
+						},
+						{
+							"key": "quantity",
+							"value": "2",
+							"description": "Quantité du produit"
+						}
+					]
+				},
+				"description": "Ajoute le premier article à la commande. Utilise le prix de vente actuel du produit."
+			}
+		},
+		{
+			"name": "2b. Add Second Item to Order",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYXRpYUBnbWFpbC5jb20iLCJpYXQiOjE3NTA5OTA3MjMsImV4cCI6MTc1MTAwODcyM30.LrVGLFqjFxT3_XGmWQTjUQ06fcC08QS0zO6J4g2ITwgSe-GeUDRw2xxhLveWT0Goeii16hOmCm2VQVDsNpYlWw"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/orders/1/items?productId=2&quantity=1",
+					"host": ["localhost"],
+					"port": "8080",
+					"path": ["api", "orders", "1", "items"],
+					"query": [
+						{
+							"key": "productId",
+							"value": "2",
+							"description": "ID du deuxième produit à ajouter"
+						},
+						{
+							"key": "quantity",
+							"value": "1",
+							"description": "Quantité du produit"
+						}
+					]
+				},
+				"description": "Ajoute un deuxième article différent à la commande pour tester le calcul du total avec plusieurs articles."
+			}
+		},
+		{
+			"name": "3. Get Order Details",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYXRpYUBnbWFpbC5jb20iLCJpYXQiOjE3NTA5OTA3MjMsImV4cCI6MTc1MTAwODcyM30.LrVGLFqjFxT3_XGmWQTjUQ06fcC08QS0zO6J4g2ITwgSe-GeUDRw2xxhLveWT0Goeii16hOmCm2VQVDsNpYlWw"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/orders/1",
+					"host": ["localhost"],
+					"port": "8080",
+					"path": ["api", "orders", "1"]
+				},
+				"description": "Récupère les détails complets de la commande, y compris tous les articles et leurs prix."
+			}
+		},
+		{
+			"name": "4. Update Order Status",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYXRpYUBnbWFpbC5jb20iLCJpYXQiOjE3NTA5OTA3MjMsImV4cCI6MTc1MTAwODcyM30.LrVGLFqjFxT3_XGmWQTjUQ06fcC08QS0zO6J4g2ITwgSe-GeUDRw2xxhLveWT0Goeii16hOmCm2VQVDsNpYlWw"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/orders/1/status?status=CONFIRMED",
+					"host": ["localhost"],
+					"port": "8080",
+					"path": ["api", "orders", "1", "status"],
+					"query": [
+						{
+							"key": "status",
+							"value": "CONFIRMED",
+							"description": "Nouveau statut de la commande (PENDING, CONFIRMED, etc.)"
+						}
+					]
+				},
+				"description": "Change le statut de la commande. Vérifier que le changement est bien enregistré."
+			}
+		},
+		{
+			"name": "5. Remove Item from Order",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYXRpYUBnbWFpbC5jb20iLCJpYXQiOjE3NTA5OTA3MjMsImV4cCI6MTc1MTAwODcyM30.LrVGLFqjFxT3_XGmWQTjUQ06fcC08QS0zO6J4g2ITwgSe-GeUDRw2xxhLveWT0Goeii16hOmCm2VQVDsNpYlWw"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/orders/1/items/1",
+					"host": ["localhost"],
+					"port": "8080",
+					"path": ["api", "orders", "1", "items", "1"]
+				},
+				"description": "Supprime un article de la commande. Vérifier que le total est recalculé correctement."
+			}
+		},
+		{
+			"name": "6. Get Customer Orders",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYXRpYUBnbWFpbC5jb20iLCJpYXQiOjE3NTA5OTA3MjMsImV4cCI6MTc1MTAwODcyM30.LrVGLFqjFxT3_XGmWQTjUQ06fcC08QS0zO6J4g2ITwgSe-GeUDRw2xxhLveWT0Goeii16hOmCm2VQVDsNpYlWw"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/orders/customer/1",
+					"host": ["localhost"],
+					"port": "8080",
+					"path": ["api", "orders", "customer", "1"]
+				},
+				"description": "Récupère toutes les commandes d'un client spécifique."
+			}
+		},
+		{
+			"name": "7. Get Order Total",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYXRpYUBnbWFpbC5jb20iLCJpYXQiOjE3NTA5OTA3MjMsImV4cCI6MTc1MTAwODcyM30.LrVGLFqjFxT3_XGmWQTjUQ06fcC08QS0zO6J4g2ITwgSe-GeUDRw2xxhLveWT0Goeii16hOmCm2VQVDsNpYlWw"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/orders/1/total",
+					"host": ["localhost"],
+					"port": "8080",
+					"path": ["api", "orders", "1", "total"]
+				},
+				"description": "Récupère le montant total de la commande. À vérifier après chaque modification des articles."
+			}
+		},
+		{
+			"name": "8. Create New Price",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYXRpYUBnbWFpbC5jb20iLCJpYXQiOjE3NTA5OTA3MjMsImV4cCI6MTc1MTAwODcyM30.LrVGLFqjFxT3_XGmWQTjUQ06fcC08QS0zO6J4g2ITwgSe-GeUDRw2xxhLveWT0Goeii16hOmCm2VQVDsNpYlWw"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"product\": {\n        \"id\": 2,\n        \"reference\": \"PROD002\"\n    },\n    \"value\": 15.99,\n    \"side\": \"Sell\",\n    \"modifSeller\": {\n        \"id\": 3\n    }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/price",
+					"host": ["localhost"],
+					"port": "8080",
+					"path": ["api", "v1", "price"]
+				},
+				"description": "Crée un nouveau prix pour un produit. Nécessaire avant d'ajouter un nouveau produit à une commande."
+			}
+		},
+		{
+			"name": "9. Delete Order",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYXRpYUBnbWFpbC5jb20iLCJpYXQiOjE3NTA5OTA3MjMsImV4cCI6MTc1MTAwODcyM30.LrVGLFqjFxT3_XGmWQTjUQ06fcC08QS0zO6J4g2ITwgSe-GeUDRw2xxhLveWT0Goeii16hOmCm2VQVDsNpYlWw"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/orders/1",
+					"host": ["localhost"],
+					"port": "8080",
+					"path": ["api", "orders", "1"]
+				},
+				"description": "Supprime une commande complète. À utiliser avec précaution."
+			}
+		}
+	]
+} 

@@ -1,0 +1,193 @@
+<div class="admin-orders">
+  <div class="header">
+    <h2>Gestion des Commandes (Admin)</h2>
+    <button class="btn btn-primary" (click)="createOrderForCustomer()">
+      <i class="fas fa-plus"></i> Créer une commande
+    </button>
+  </div>
+
+  <!-- Filtres avancés -->
+  <div class="filters-section">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="form-group">
+          <label>Client</label>
+          <select class="form-control" [(ngModel)]="selectedCustomerId" (change)="onFilterChange()">
+            <option [value]="null">Tous les clients</option>
+            <option *ngFor="let customer of customers" [value]="customer.id">
+              {{ customer.firstName }} {{ customer.lastName }}
+            </option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="col-md-3">
+        <div class="form-group">
+          <label>Statut</label>
+          <select class="form-control" [(ngModel)]="selectedStatus" (change)="onFilterChange()">
+            <option value="all">Tous les statuts</option>
+            <option *ngFor="let status of orderStatuses" [value]="status.value">
+              {{ status.label }}
+            </option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="col-md-3">
+        <div class="form-group">
+          <label>Rechercher</label>
+          <input type="text" class="form-control" 
+                 [(ngModel)]="searchTerm" 
+                 (input)="onFilterChange()"
+                 placeholder="ID commande ou nom client">
+        </div>
+      </div>
+      
+      <div class="col-md-3">
+        <div class="form-group">
+          <label>Trier par</label>
+          <select class="form-control" [(ngModel)]="sortBy" (change)="onFilterChange()">
+            <option value="date-desc">Date (plus récent)</option>
+            <option value="date-asc">Date (plus ancien)</option>
+            <option value="total-desc">Total (plus élevé)</option>
+            <option value="total-asc">Total (plus bas)</option>
+            <option value="status">Statut</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row mt-2">
+      <div class="col-12">
+        <button class="btn btn-outline-secondary" (click)="clearFilters()">
+          <i class="fas fa-times"></i> Effacer les filtres
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistiques rapides -->
+  <div class="stats-overview">
+    <div class="stat-item pending">
+      <div class="stat-icon">
+        <i class="fas fa-clock"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ pendingOrdersCount }}</div>
+        <div class="stat-label">En attente</div>
+      </div>
+    </div>
+    <div class="stat-item processing">
+      <div class="stat-icon">
+        <i class="fas fa-cogs"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ processingOrdersCount }}</div>
+        <div class="stat-label">En traitement</div>
+      </div>
+    </div>
+    <div class="stat-item shipped">
+      <div class="stat-icon">
+        <i class="fas fa-shipping-fast"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ shippedOrdersCount }}</div>
+        <div class="stat-label">Expédiées</div>
+      </div>
+    </div>
+    <div class="stat-item delivered">
+      <div class="stat-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-number">{{ deliveredOrdersCount }}</div>
+        <div class="stat-label">Livrées</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Liste des commandes -->
+  <div class="orders-list">
+    <div *ngIf="loading" class="loading">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Chargement...</span>
+      </div>
+      <p>Chargement des commandes...</p>
+    </div>
+
+    <div *ngIf="!loading && filteredOrders.length === 0" class="no-data">
+      <i class="fas fa-shopping-cart fa-3x text-muted"></i>
+      <p>Aucune commande trouvée</p>
+    </div>
+
+    <div *ngIf="!loading && filteredOrders.length > 0" class="orders-table">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Client</th>
+            <th>Date</th>
+            <th>Articles</th>
+            <th>Total</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of filteredOrders">
+            <td>
+              <strong>#{{ order.id }}</strong>
+            </td>
+            <td>
+              <div class="customer-info">
+                <div class="customer-name">{{ getCustomerName(order.customerId) }}</div>
+                <div class="customer-email">{{ getCustomerEmail(order.customerId) }}</div>
+              </div>
+            </td>
+            <td>
+              {{ order.orderDate | date:'dd/MM/yyyy HH:mm' }}
+            </td>
+            <td>
+              <span class="badge bg-secondary">{{ order.items.length || 0 }} articles</span>
+            </td>
+            <td>
+              <strong>{{ order.totalAmount | currency:'EUR' }}</strong>
+            </td>
+            <td>
+              <span class="badge" 
+                    [ngClass]="'bg-' + getStatusInfo(order.status).color">
+                {{ getStatusInfo(order.status).label }}
+              </span>
+            </td>
+            <td>
+              <div class="actions">
+                <button class="btn btn-sm btn-outline-primary" 
+                        (click)="viewOrderDetails(order)" 
+                        title="Voir les détails">
+                  <i class="fas fa-eye"></i>
+                </button>
+                
+                <div class="dropdown d-inline-block">
+                  <button class="btn btn-sm btn-outline-secondary dropdown-toggle" 
+                          type="button" 
+                          data-bs-toggle="dropdown">
+                    <i class="fas fa-edit"></i> Statut
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li *ngFor="let status of orderStatuses">
+                      <a class="dropdown-item" 
+                         (click)="updateOrderStatus(order, status.value)"
+                         [class.active]="order.status === status.value">
+                        {{ status.label }}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div> 

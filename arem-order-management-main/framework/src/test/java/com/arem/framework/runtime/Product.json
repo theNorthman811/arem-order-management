@@ -1,0 +1,27 @@
+{
+        "prices":
+        [
+        	{
+        		"version":0,
+        		"id":0,
+        		"measure":"Unit",
+        		"price":100.0,
+        		"side":"Sell",
+        		"startDate": "2018-10-30T23:09:02",
+        		"endDate": "2018-10-30T23:09:02",
+        		"modifSellerId":1,
+        		"creationDate":null,
+        		"modifDate":null
+        	}
+        ],
+        "version": 1,
+        "name": "Javel 100ML",
+        "id": 4,
+        "comment": "Test product comment",
+        "reference": "159856233",
+        "description": "Test product description",
+        "modifSellerId": 1,
+        "modifDate": "2018-11-11T22:34:40",
+        "creationDate": "2018-11-11T22:34:44",
+        "createSellerId": 1
+    }

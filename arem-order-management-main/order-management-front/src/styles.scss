@@ -1,0 +1,181 @@
+/* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Custom notification styles */
+.notification-success {
+  background-color: #4caf50 !important;
+  color: white !important;
+}
+
+.notification-error {
+  background-color: #f44336 !important;
+  color: white !important;
+}
+
+.notification-warning {
+  background-color: #ff9800 !important;
+  color: white !important;
+}
+
+.notification-info {
+  background-color: #2196f3 !important;
+  color: white !important;
+}
+
+/* Snackbar notification styles */
+.notification-snackbar {
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.success-snackbar {
+  background: linear-gradient(135deg, #4caf50, #45a049) !important;
+  color: white !important;
+}
+
+.error-snackbar {
+  background: linear-gradient(135deg, #f44336, #d32f2f) !important;
+  color: white !important;
+}
+
+.warning-snackbar {
+  background: linear-gradient(135deg, #ff9800, #f57c00) !important;
+  color: white !important;
+}
+
+.info-snackbar {
+  background: linear-gradient(135deg, #2196f3, #1976d2) !important;
+  color: white !important;
+}
+
+.loading-snackbar {
+  background: linear-gradient(135deg, #607d8b, #455a64) !important;
+  color: white !important;
+}
+
+/* Snackbar action button */
+.notification-snackbar .mat-simple-snackbar-action {
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Global button styles */
+.mat-mdc-raised-button {
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+}
+
+.mat-mdc-button {
+  border-radius: 6px !important;
+}
+
+/* Card styles */
+.mat-mdc-card {
+  border-radius: 12px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+  transition: box-shadow 0.3s ease !important;
+}
+
+.mat-mdc-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15) !important;
+}
+
+/* Form field styles */
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+/* Table styles */
+.mat-mdc-table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.mat-mdc-header-row {
+  background-color: #f5f5f5;
+  font-weight: 600;
+}
+
+/* Status badge styles */
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-badge.paid {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-badge.cancelled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.status-badge.shipped {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+/* Loading spinner styles */
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+/* Error message styles */
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #f44336;
+  padding: 1rem;
+  background-color: #ffebee;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+/* Success message styles */
+.success-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #4caf50;
+  padding: 1rem;
+  background-color: #e8f5e8;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
