@@ -18,7 +18,7 @@ export class AuthService {
       email, // le backend attend "email" maintenant
       password
     };
-    return this.http.post<AuthResponse>(`${this.apiUrl}/api/auth/login`, loginData)
+    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, loginData)
       .pipe(
         tap(response => {
           console.log('🔍 DEBUG: Réponse complète du login:', response);
@@ -54,7 +54,7 @@ export class AuthService {
       email: phoneNumber, // Utiliser l'email maintenant
       password
     };
-    return this.http.post<AuthResponse>(`${this.apiUrl}/api/auth/login-client`, loginData)
+    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login-client`, loginData)
       .pipe(
         tap(response => {
           if (response.token) {
@@ -67,7 +67,7 @@ export class AuthService {
   }
 
   register(registerData: RegisterRequest) {
-    return this.http.post<any>(`${this.apiUrl}/api/auth/register-client`, registerData);
+    return this.http.post<any>(`${this.apiUrl}/auth/register-client`, registerData);
   }
 
   logout(): void {
@@ -88,10 +88,10 @@ export class AuthService {
   }
 
   getCurrentUser(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/api/auth/me`);
+    return this.http.get<any>(`${this.apiUrl}/auth/me`);
   }
 
   updateCurrentUser(data: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/api/auth/me`, data);
+    return this.http.put<any>(`${this.apiUrl}/auth/me`, data);
   }
 } 
