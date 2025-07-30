@@ -43,7 +43,7 @@ export interface PriceContract {
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = `${environment.apiUrl}/api/v1`;
+  private apiUrl = `${environment.apiUrl}/v1`;
 
   constructor(private http: HttpClient) {}
 
